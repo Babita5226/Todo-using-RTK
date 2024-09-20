@@ -4,6 +4,7 @@ const initialState = {
   todoInput: "",
   updateTodo: null,
   todos: [],
+  deletedTodos: [],
 };
 
 export const todoSlice = createSlice({
@@ -19,11 +20,23 @@ export const todoSlice = createSlice({
       state.todoInput = "";
       state.updateTodo = null;
     },
+    //If you want to only remove the todo
+    // removeTodo: (state, action) => {
+    //   const id = action.payload;
+    //   state.todos = state.todos.filter((todo) => todo.id !== id);
+    //   state.todoInput = "";
+    //   state.updateTodo = null;
+    // },
+    //if you want to delete and show the deleted todo
     removeTodo: (state, action) => {
       const id = action.payload;
-      state.todos = state.todos.filter((todo) => todo.id !== id);
-      state.todoInput = "";
-      state.updateTodo = null;
+      const todoToDelete = state.todos.find((todo) => todo.id === id);
+      if (todoToDelete) {
+        state.deletedTodos.push(todoToDelete);
+        state.todos = state.todos.filter((todo) => todo.id !== id);
+        state.todoInput = "";
+        state.updateTodo = null;
+      }
     },
     editTodo: (state, action) => {
       const id = action.payload;
